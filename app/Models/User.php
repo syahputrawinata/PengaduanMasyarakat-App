@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        // 'name',
         'email',
         'password',
         'role',
@@ -43,4 +43,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+/////////////////////////////////////////////////////////
+    // Relasi: User memiliki banyak laporan
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    // Relasi: User memiliki banyak komentar
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // Relasi: User memiliki satu staff_province
+    public function staffProvince()
+    {
+        return $this->hasOne(StaffProvince::class);
+    }
 }

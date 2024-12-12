@@ -58,6 +58,13 @@ class LoginController extends Controller
             return redirect()->route('guest.dashboard')->with('success', 'Akun terbuat!Anda telah login!');
         }
 
-        return back()->withErrors(['failregis' => 'Registrasi Gagal!']);
+        return redirect()->back()->with('failregis', 'Email sudah terdaftaf');
+    }
+
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('logout', 'Anda telah logout!');
     }
 }

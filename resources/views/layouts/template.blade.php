@@ -1,69 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token()}}">
-        <title>Apoteker App</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 25px;
+        }
+        .sidebar a {
+            background-color: #0f766e;
+            color: white;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .sidebar a:hover {
+            transform: scale(1.1);
+            background-color: #0d5e56;
+        }
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+        }
+    </style>
+    <title>Sidebar Template</title>
+</head>
+<body>
 
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container">
-              <a class="navbar-brand" href="#">Apotek App</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                @if(Auth::check())
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Dashboard</a>
-                  </li>
-                  @if (Auth::user()->role == 'admin')
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Obat
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="">Data Obat</a></li>
-                      <li><a class="dropdown-item" href="">Tambah</a></li>
-                      <li><a class="dropdown-item" href="">Stok</a></li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    {{-- <a class="nav-link {{Route::is('pembelian') ? 'active' : ''}}" aria-current="page" href="{{ route('pembelian') }}">Pembelian</a> --}}
-                    <a class="nav-link" aria-current="page" href="">Pembelian</a>
-                  </li>
-                  @endif
-                  @if (Auth::user()->role == 'cashier')
-                  <li class="nav-item">
-                    {{-- <a class="nav-link {{Route::is('pembelian') ? 'active' : ''}}" aria-current="page" href="{{ route('pembelian') }}">Pembelian</a> --}}
-                    <a class="nav-link" aria-current="page" href="">Pembelian</a>
-                  </li>
-                  @endif
-                  @if (Auth::user()->role == 'admin')
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="">Kelola Akun</a>
-                  </li>
-                  @endif
-                  <li class="nav-item">
-                    <a href="" class="nav-link">logout</a>
-                  </li>
-                  @endif
-                </ul>
-              </div>
-            </div>
-        </nav>
+<div class="sidebar">
+    <a href="#" title="User">
+        <i class="fas fa-home"></i>
+    </a>
+    <a href="#" title="Exclamation">
+        <i class="fas fa-exclamation"></i>
+    </a>
+    <a href="#" title="Pen">
+        <i class="fas fa-pen"></i>
+    </a>
+    <a href="{{route('logout')}}" title="Logout">
+    <i class="fas fa-running"></i>
+    </a>
+</div>
 
-        <div class="container mt-5">
-            @yield('content')
-        </div>
-    
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        @stack('script')
-    </body>
+<div class="container mt-5">
+        @yield('content')
+</div>
+
+</body>
 </html>

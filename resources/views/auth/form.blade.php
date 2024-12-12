@@ -101,12 +101,12 @@
         @if(Session::get('failed'))
                 <div class="alert alert-danger">{{ Session::get('failed') }}</div>
         @endif
+        @if(Session::get('logout'))
+                <div class="alert alert-danger">{{ Session::get('logout') }}</div>
+        @endif
         @if(Session::get('failregis'))
                 <div class="alert alert-danger">{{ Session::get('failregis') }}</div>
         @endif
-            @if (Session::get('failed'))
-                <div class="alert alert-danger">{{ Session::get('failed') }}</div>
-            @endif
             <input type="email" class="form-control" placeholder="Email" name="email" required />
             <input type="password" class="form-control" placeholder="Password" name="password" required />
             <!-- <input type="password" class="form-control" placeholder="Konfirmasi Password (untuk Register)" name="password_confirmation" /> -->

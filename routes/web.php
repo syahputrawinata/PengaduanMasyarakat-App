@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,17 +19,15 @@ use Illuminate\Support\Facades\Route;
         return view('welcome');
     });
     
+    // Halaman Login
     Route::get('/login', function() { 
         return view ('auth.form'); 
     })->name('login');
     
     Route::post('/login', [LoginController::class, 'loginAuth'])->name('login.auth');
 
-    // Route::get('/register', function() { 
-    //     return view ('auth.login'); 
-    // })->name('register');
-    // Route::post('/register', [LoginController::class, 'registerAuth'])->name('register.auth');
-
+    //logout
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Halaman Headstaff
     Route::get('/headstaff.dashboard', function (){
@@ -43,3 +42,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('/guest.dashboard', function (){
         return view('guest.dashboard');
         })->name('guest.dashboard');
+
+    Route::prefix('/report')->name('report.')->group(function() {
+        Route::get('/create', [ReportController::class, 'create'])->name('create');
+        Route::post('/store', [ReportController::class, 'store'])->name('store');
+    });
