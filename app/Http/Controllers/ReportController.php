@@ -11,10 +11,15 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $reports = Report::WHERE('province', 'LIKE', '%'. $request->filter_province . '%')->orderBY('province', 'ASC')->get();
+
+        return view('guest.dashboard', compact('reports'));
+
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -34,7 +39,7 @@ class ReportController extends Controller
           // Validasi input dari pengguna
           $request->validate([
             // 'user_id' => 'required|exists:users,id',
-            'province' => 'required|string',
+            'province' => 'required|string',    
             'regency' => 'required|string',
             'subdistrict' => 'required|string',
             'village' => 'required|string',
@@ -45,15 +50,15 @@ class ReportController extends Controller
         ]);
 
         // Proses upload image jika ada
-        // $image = $request->file('image');
-        // $filename = date('Y-m-d').$image->getClientOriginalName();
-        // $path = 'image-pengaduan/'.$filename;
+        $image = $request->file('image');
+        $filename = date('Y-m-d').$image->getClientOriginalName();
+        $path = 'image-pengaduan/'.$filename;
 
-        // Storage::disk('public')->put($path,file_get_contents($image));
-        $path = null;
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/pengaduan');
-        }
+        Storage::disk('public')->put($path,file_get_contents($image));
+        // $path = null;
+        // if ($request->hasFile('image')) {
+        //     $path = $request->file('image')->store('public/pengaduan');
+        // }
 // dd($request->all());
         // Simpan data pengaduan ke database
         Report::create([
@@ -69,7 +74,7 @@ class ReportController extends Controller
         ]);
 
         // Mengembalikan response atau redirect ke halaman sukses
-        return redirect()->route('  report.create')->with('success', 'Pengaduan berhasil!');
+        return redirect()->route('report.create')->with('success', 'Pengaduan berhasil!');
 
     }
 
@@ -79,6 +84,30 @@ class ReportController extends Controller
     public function show(string $id)
     {
         //
+        $reports = Report::with(['comments'])->findOrFail($id);
+        $reports->increment('viewers'); // Tambah jumlah views setiap kali halaman dikunjungi
+        return view('guest.report.detail', compact('reports'));
+    }
+
+    public function voting(Request $request, $id)
+    {
+        $reports = Report::findOrFail($id);
+
+        // Periksa apakah user sudah like
+        $voting = $reports->votings()->where('user_id', auth()->id())->first();
+
+        if ($voting) {
+            // Jika sudah, hapus like
+            $voting->delete();
+            return redirect()->back()->with('message', 'You unliked this post.');
+        }
+
+        // Jika belum, tambahkan like
+        $reports->votings()->create([
+            'user_id' => auth()->id(),
+        ]);
+
+        return redirect()->back()->with('message', 'You liked this post.');
     }
 
     /**

@@ -15,7 +15,7 @@
             background-color: #ff7f00;
             padding: 30px;
             color: white;
-            border-radius: 8%;
+            border-radius: 5%;
         }
         .form-container h1 {
             font-weight: bold;

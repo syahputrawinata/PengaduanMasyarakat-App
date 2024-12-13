@@ -30,7 +30,7 @@ class LoginController extends Controller
                 } elseif ($users->role === 'staff') {
                     return redirect()->route('staff.dashboard')->with('success', 'Anda telah login sebagai Staff!');
                 } elseif ($users->role === 'guest') {
-                    return redirect()->route('guest.dashboard')->with('success', 'Anda telah login sebagai Guest!');
+                    return redirect()->route('report.index')->with('success', 'Anda telah login sebagai Guest!');
                 }
             }
 

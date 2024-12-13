@@ -51,13 +51,13 @@
 <body>
 
 <div class="sidebar">
-    <a href="#" title="User">
+    <a href="{{route('report.index')}}" title="User">
         <i class="fas fa-home"></i>
     </a>
     <a href="#" title="Exclamation">
         <i class="fas fa-exclamation"></i>
     </a>
-    <a href="#" title="Pen">
+    <a href="{{route('report.create')}}" title="Pen">
         <i class="fas fa-pen"></i>
     </a>
     <a href="{{route('logout')}}" title="Logout">

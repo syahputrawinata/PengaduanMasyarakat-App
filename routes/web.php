@@ -1,5 +1,6 @@
 <?php
 
+// use App\Models\Report;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -39,11 +40,15 @@ use Illuminate\Support\Facades\Route;
         })->name('staff.dashboard');
 
     // Halaman Guest
-    Route::get('/guest.dashboard', function (){
-        return view('guest.dashboard');
-        })->name('guest.dashboard');
+// Route::get('/guest.dashboard', function () {
+//     $reports = Report::all(); // Ambil semua data laporan
+//     return view('guest.dashboard', compact('reports')); // Kirim data ke view
+// })->name('guest.dashboard');
 
     Route::prefix('/report')->name('report.')->group(function() {
+        Route::get('/landing', [ReportController::class, 'index'])->name('index');
         Route::get('/create', [ReportController::class, 'create'])->name('create');
         Route::post('/store', [ReportController::class, 'store'])->name('store');
+        Route::get('report/{id}', [ReportController::class, 'show'])->name('show');
+        Route::post('report/{id}/voting', [ReportController::class, 'voting'])->name('voting');
     });
