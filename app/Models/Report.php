@@ -40,10 +40,4 @@ class Report extends Model
     {
         return $this->hasOne(Response::class);
     }
-
-    public function isLikedByUser($userId)
-    {
-        $votingData = json_decode($this->voting, true) ?? [];
-        return in_array($userId, $votingData);
-    }
 }

@@ -59,15 +59,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <textarea aria-label="With textarea" class="form-control" placeholder="Komentar"></textarea>
-                        </div>
-                        <button class="btn btn-success mt-2">Buat Komentar</button>
-                    </div>
-                </div>
+{{--coment--}}
+<div class="card mb-3">
+    <div class="card-body">
+        <!-- Komentar yang sudah ada -->
+        @foreach ($reports->comments as $comment)
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <div class="d-flex flex-column ms-2">
+                <a href="mailto:{{ $comment->user->email }}" class="text-primary fw-bold">{{ $comment->user->email }}</a>
+                <small class="text-muted">{{ $comment->created_at->format('d F Y') }}</small>
+                <p class="mt-1">{{ $comment->comment }}</p>
+            </div>
+        </div>
+        @endforeach
+
+        <!-- Form Tambah Komentar -->
+        <h5 class="mb-3">Tulis Komentar</h5>
+        <form action="{{ route('report.comment', $reports->id) }}" method="POST">
+            @csrf
+            <textarea 
+                class="form-control" 
+                name="comment" 
+                placeholder="Tulis komentar Anda..." 
+                rows="3" 
+                required></textarea>
+            <div class="d-flex justify-content-end mt-2">
+                <button type="submit" class="btn btn-success">Kirim Komentar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{----}}
             </div>
             <div class="col-md-4">
                 <div class="info-card">

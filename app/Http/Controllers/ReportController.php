@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Report;
+use \App\Models\comment;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -93,21 +94,42 @@ class ReportController extends Controller
     {
         $reports = Report::findOrFail($id);
 
-        // Periksa apakah user sudah like
-        $voting = $reports->votings()->where('user_id', auth()->id())->first();
-
-        if ($voting) {
-            // Jika sudah, hapus like
-            $voting->delete();
-            return redirect()->back()->with('message', 'You unliked this post.');
+        // Ambil data voting dari kolom
+        $voting = json_decode($reports->voting, true);
+    
+        // ID user saat ini
+        $userId = auth()->id();
+    
+        if (in_array($userId, $voting)) {
+            // Jika user sudah voting, hapus dari daftar
+            $voting = array_diff($voting, [$userId]);
+            $message = 'Voting dihapus!';
+        } else {
+            // Jika user belum voting, tambahkan ke daftar
+            $voting[] = $userId;
+            $message = 'Voting berhasil!';
         }
+    
+        // Simpan kembali ke database
+        $reports->voting = json_encode($voting);
+        $reports->save();
+    
+        return redirect()->back()->with('success', $message);
+    }
 
-        // Jika belum, tambahkan like
-        $reports->votings()->create([
-            'user_id' => auth()->id(),
+    public function comment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|max:500',
         ]);
 
-        return redirect()->back()->with('message', 'You liked this post.');
+        Comment::create([
+            'report_id' => $id,
+            'user_id' => auth()->id(),
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->back()->with('success', 'Komentar berhasil ditambahkan!');
     }
 
     /**

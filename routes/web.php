@@ -3,6 +3,8 @@
 // use App\Models\Report;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\headstaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +21,10 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', function () {
         return view('welcome');
     });
+
+    Route::get('/monitoring', function () {
+        return view('guest.report.monitoring');
+    });
     
     // Halaman Login
     Route::get('/login', function() { 
@@ -31,13 +37,23 @@ use Illuminate\Support\Facades\Route;
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Halaman Headstaff
-    Route::get('/headstaff.dashboard', function (){
-        return view('headstaff.dashboard');
-        })->name('headstaff.dashboard');
+    // Route::get('/headstaff.dashboard', function (){
+    //     return view('headstaff.dashboard');
+    //     })->name('headstaff.dashboard');
+
+    Route::prefix('/headstaff')->name('headstaff.')->group(function(){
+        Route::get('/landing', [headstaffController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('/user')->name('user.')->group(function(){
+        Route::get('/', [headstaffController::class, 'userIndex'])->name('userIndex');
+    });
+
     // Halaman Staff
-    Route::get('/staff.dashboard', function (){
-        return view('staff.dashboard');
-        })->name('staff.dashboard');
+
+    Route::prefix('/staff')->name('staff.')->group(function(){
+        Route::get('/landing', [StaffController::class, 'index'])->name('index');
+    });
 
     // Halaman Guest
 // Route::get('/guest.dashboard', function () {
@@ -51,4 +67,5 @@ use Illuminate\Support\Facades\Route;
         Route::post('/store', [ReportController::class, 'store'])->name('store');
         Route::get('report/{id}', [ReportController::class, 'show'])->name('show');
         Route::post('report/{id}/voting', [ReportController::class, 'voting'])->name('voting');
+        Route::post('/report/{id}/comment', [ReportController::class, 'comment'])->name('comment');
     });

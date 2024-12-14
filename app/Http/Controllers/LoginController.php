@@ -26,9 +26,9 @@ class LoginController extends Controller
 
                 // Cek role dan arahkan ke halaman yang sesuai
                 if ($users->role === 'head_staff') {
-                    return redirect()->route('headstaff.dashboard')->with('success', 'Anda telah login sebagai Head Staff!');
+                    return redirect()->route('headstaff.index')->with('success', 'Anda telah login sebagai Head Staff!');
                 } elseif ($users->role === 'staff') {
-                    return redirect()->route('staff.dashboard')->with('success', 'Anda telah login sebagai Staff!');
+                    return redirect()->route('staff.index')->with('success', 'Anda telah login sebagai Staff!');
                 } elseif ($users->role === 'guest') {
                     return redirect()->route('report.index')->with('success', 'Anda telah login sebagai Guest!');
                 }

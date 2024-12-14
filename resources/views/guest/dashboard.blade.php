@@ -15,6 +15,10 @@
             background-color: #ff7f00;
         }
 
+        .alert{
+            background-color: white;
+        }
+
         .card {
             margin-bottom: 20px;
         }
@@ -37,24 +41,18 @@
             margin-bottom: 10px;
         }
 
-        .fab-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+        .fa-heart {
+        font-size: 18px;
+        color: gray;
+        transition: color 0.3s ease;
         }
 
-        .fab-buttons .btn {
-            margin-bottom: 10px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .fa-heart.liked {
+            color: red; /* Warna love ketika di-click */
         }
 
-        .fab-buttons .btn i {
-            font-size: 20px;
+        .like-button:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -62,7 +60,7 @@
 <body>
     <div class="container mt-3">
         @if(Session::get('success'))
-        <div class="alert alert-Success">{{ Session::get('success') }}</div>
+        <div class="alert alert-Success" background-color="white">{{ Session::get('success') }}</div>
         @endif
         <form class="input-gropu mb-3 d-flex" action="{{ route('report.index')}}" method="GET">
             <select class="form-select mr-3" id="province" name="filter_province" value="{{ request('filter_province')}}">
@@ -79,11 +77,11 @@
                     <img src="{{ asset('storage/' . $report->image) }}" alt="Image" class="img-fluid rounded-start" height="200" width="300" />
                     </div>
                     <div class="col-md-8">
-                        <div class="card-body">
+                        <div class="card-body position-relative">
                             <h5 class="card-title"><a href="{{route('report.show', $report->id)}}" class="text-black">{{ $report->description }}</a></h5>
                             <p class="card-text">
                                 <i class="fas fa-eye"></i> {{$report->viewers}}
-                                <i class="fas fa-heart"></i>{{ count(json_decode($report->voting, true)) }}
+                                <i class="fas fa-heart"></i> {{ count(json_decode($report->voting, true)) }}
                             </p>
                             <p class="card-text">
                                 <small class="text-muted">{{ $report->user->email }}</small>
@@ -91,18 +89,15 @@
                             <p class="card-text">
                                 <small class="text-muted">{{ $report->created_at->diffForHumans() }}</small>
                             </p>
-                            {{-- <p class="card-text text-end">
-                                <a class="text-decoration-none" href="#">
-                                    <i class="fas fa-heart"></i> vote
-                                </a>
-                            </p> --}}
-                            <form action="{{ route('report.voting', $report->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn {{ $report->isLikedByUser(auth()->id()) ? 'btn-danger' : 'btn-primary' }}">
-                        {{ $report->isLikedByUser(auth()->id()) ? 'Unlike' : 'Like' }}
-                    </button>
-                </form>
-                <small>{{ count(json_decode($report->voting, true)) }} likes</small>
+                            <form action="{{ route('report.voting', $report->id) }}" method="POST" id="likeForm-{{ $report->id }}" class="position-absolute top-0 end-0">
+                                @csrf
+                                <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                                    <i 
+                                        class="fa fa-heart {{ in_array(auth()->id(), json_decode($report->voting, true)) ? 'liked' : '' }}" 
+                                        id="likeIcon-{{ $report->id }}"
+                                    ></i><p>vote</p>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

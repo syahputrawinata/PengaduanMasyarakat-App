@@ -46,18 +46,18 @@
             padding: 20px;
         }
     </style>
-    <title>Sidebar Template</title>
+    <title>Pengaduan App</title>
 </head>
 <body>
 
 <div class="sidebar">
-    <a href="{{route('report.index')}}" title="User">
+    <a href="{{route('report.index')}}" title="Home">
         <i class="fas fa-home"></i>
     </a>
-    <a href="#" title="Exclamation">
+    <a href="#" title="Monitoring">
         <i class="fas fa-exclamation"></i>
     </a>
-    <a href="{{route('report.create')}}" title="Pen">
+    <a href="{{route('report.create')}}" title="Buat Pengaduan">
         <i class="fas fa-pen"></i>
     </a>
     <a href="{{route('logout')}}" title="Logout">

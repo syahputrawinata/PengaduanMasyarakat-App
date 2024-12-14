@@ -12,7 +12,7 @@ class comment extends Model
     protected $fillable = [
     'user_id', 
     'report_id', 
-    'message',
+    'comment',
     ];
 
     // Relasi: Komentar dimiliki oleh user
