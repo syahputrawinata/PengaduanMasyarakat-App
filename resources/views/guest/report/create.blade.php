@@ -117,7 +117,7 @@
         const districtSelect = document.getElementById('subdistrict');
         const villageSelect = document.getElementById('village');
 
-        // Load provinces
+        // Load provinsi
         fetch('https://dev.farizdotid.com/api/daerahindonesia/provinsi')
             .then(response => response.json())
             .then(data => {
@@ -129,7 +129,7 @@
                 });
             });
 
-        // Load cities based on selected province
+        // Load kabupaten berdasarkan provinsi
         provinceSelect.addEventListener('change', function () {
             citySelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
             districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
@@ -149,7 +149,7 @@
             }
         });
 
-        // Load districts based on selected city
+        // Load kecamatan berdasarkan kabupaten
         citySelect.addEventListener('change', function () {
             districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
             villageSelect.innerHTML = '<option value="">Pilih Desa/Kelurahan</option>';
@@ -168,7 +168,7 @@
             }
         });
 
-        // Load villages based on selected district
+        // Load desa berdasarkan kecamatan
         districtSelect.addEventListener('change', function () {
             villageSelect.innerHTML = '<option value="">Pilih Desa/Kelurahan</option>';
 

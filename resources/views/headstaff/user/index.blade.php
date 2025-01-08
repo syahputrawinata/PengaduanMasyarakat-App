@@ -1,3 +1,5 @@
+@extends('layouts.template')
+@section('content')
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,6 +28,7 @@
         }
         .btn-reset:hover {
             background-color: #0b5ed7;
+            color: white;
         }
         .btn-hapus {
             background-color: #dc3545;
@@ -33,6 +36,7 @@
         }
         .btn-hapus:hover {
             background-color: #bb2d3b;
+            color: white;
         }
         .btn-buat {
             background-color: #215734;
@@ -54,7 +58,16 @@
             <!-- Tabel Akun Staff -->
             <div class="col-md-7">
                 <div class="table-container">
-                    <h5>Akun Staff Daerah JAWA BARAT</h5>
+                    <h5>Akun Staff Daerah {{ $staffProvince->province_name }}</h5>
+                    @if (Session::get('reset'))
+                        <div class="alert alert-success">{{Session::get('reset') }}</div>
+                    @endif
+                    @if (Session::get('success'))
+                        <div class="alert alert-success">{{Session::get('success') }}</div>
+                    @endif
+                    @if (Session::get('error'))
+                        <div class="alert alert-danger">{{Session::get('error') }}</div>
+                    @endif
                     <table class="table table-bordered">
                         <thead class="table-light">
                             <tr>
@@ -64,22 +77,23 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @foreach($users as $index => $user)
                             <tr>
-                                <td>1</td>
-                                <td><a href="mailto:staff_jabar@gmail.com" class="text-primary text-decoration-none text-black">staff_jabar@gmail.com</a></td>
+                                <td>{{ $index + 1 }}</td>
+                                <td><a href="mailto:{{ $user->email }}" class="text-primary text-decoration-none text-black">{{ $user->email }}</a></td>
                                 <td>
-                                    <button class="btn btn-sm btn-reset">Reset</button>
-                                    <button class="btn btn-sm btn-hapus">Hapus</button>
+                                <form action="{{ route('user.resetPassword', ['userId' => $user->id]) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button class="btn btn-sm btn-reset" type="submit">Reset</button>
+                                </form>
+                                <form action="{{ route('user.destroy', $user->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-hapus" type="submit">Hapus</button>
+                                </form>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><a href="mailto:hstaff_jabar@gmail.com" class="text-primary text-decoration-none text-black">hstaff_jabar@gmail.com</a></td>
-                                <td>
-                                    <button class="btn btn-sm btn-reset">Reset</button>
-                                    <button class="btn btn-sm btn-hapus">Hapus</button>
-                                </td>
-                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -89,14 +103,15 @@
             <div class="col-md-5">
                 <div class="form-container">
                     <h5>Buat Akun Staff</h5>
-                    <form>
+                    <form action="{{route('user.store')}}" method="post">
+                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Masukan Email" required>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Masukan Email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="sandi" class="form-label">Sandi</label>
-                            <input type="password" class="form-control" id="sandi" placeholder="Masukan Password" required>
+                            <label for="password" class="form-label">Sandi</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Masukan Password" required>
                         </div>
                         <button type="submit" class="btn btn-buat">Buat</button>
                     </form>
@@ -109,3 +124,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+@endsection

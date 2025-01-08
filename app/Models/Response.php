@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,25 +9,23 @@ class Response extends Model
     use HasFactory;
 
     protected $fillable = [
-    'report_id', 
-    'user_id', 
-    'message'];
+        'report_id',
+        'response_status',
+        'staff_id',
+    ];
 
-    // Relasi: Respons dimiliki oleh laporan
     public function report()
     {
-        return $this->belongsTo(Report::class);
+        return $this->belongsTo(Report::class, 'report_id');
     }
 
-    // Relasi: Respons dimiliki oleh user
-    public function user()
+    public function staff()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'staff_id');
     }
 
-    // Relasi: Respons memiliki banyak response_progress
-    public function responseProgresses()
+    public function responseProgress()
     {
-        return $this->hasMany(ResponseProgress::class);
+        return $this->hasMany(ResponseProgress::class, 'response_id');
     }
 }

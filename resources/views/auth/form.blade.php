@@ -110,6 +110,9 @@
         @if(Session::get('error'))
                 <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
+        @if (Session::get('canAccess'))
+            <div class="alert alert-danger">{{ Session::get('canAccess') }}</div>
+        @endif
             <input type="email" class="form-control" placeholder="Email" name="email" required />
             <input type="password" class="form-control" placeholder="Password" name="password" required />
             <!-- <input type="password" class="form-control" placeholder="Konfirmasi Password (untuk Register)" name="password_confirmation" /> -->

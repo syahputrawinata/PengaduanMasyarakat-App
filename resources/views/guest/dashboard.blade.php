@@ -92,10 +92,8 @@
                             <form action="{{ route('report.voting', $report->id) }}" method="POST" id="likeForm-{{ $report->id }}" class="position-absolute top-0 end-0">
                                 @csrf
                                 <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
-                                    <i 
-                                        class="fa fa-heart {{ in_array(auth()->id(), json_decode($report->voting, true)) ? 'liked' : '' }}" 
-                                        id="likeIcon-{{ $report->id }}"
-                                    ></i><p>vote</p>
+                                    <i class="fa fa-heart {{ in_array(auth()->id(), json_decode($report->voting, true)) ? 'liked' : '' }}" 
+                                        id="likeIcon-{{ $report->id }}"></i><p>vote</p>
                                 </button>
                             </form>
                         </div>

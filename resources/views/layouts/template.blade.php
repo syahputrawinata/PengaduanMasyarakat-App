@@ -51,10 +51,11 @@
 <body>
 
 <div class="sidebar">
+    @if (Auth::user()->role == 'guest')
     <a href="{{route('report.index')}}" title="Home">
         <i class="fas fa-home"></i>
     </a>
-    <a href="#" title="Monitoring">
+    <a href="{{route('report.showMonitoring')}}" title="Monitoring">
         <i class="fas fa-exclamation"></i>
     </a>
     <a href="{{route('report.create')}}" title="Buat Pengaduan">
@@ -63,6 +64,28 @@
     <a href="{{route('logout')}}" title="Logout">
     <i class="fas fa-running"></i>
     </a>
+    @endif
+    {{--headstaff--}}
+    @if (Auth::user()->role == 'head_staff')
+    <a href="{{route('headstaff.index')}}" title="Home">
+        <i class="fas fa-home"></i>
+    </a>
+    <a href="{{route('user.userIndex')}}" title="Kelola Akun">
+        <i class="fas fa-user"></i>
+    </a>
+    <a href="{{route('logout')}}" title="Logout">
+    <i class="fas fa-running"></i>
+    </a>
+    @endif
+    {{--Staff--}}
+    @if (Auth::user()->role == 'staff')
+    <a href="{{route('staff.index')}}" title="Home">
+        <i class="fas fa-home"></i>
+    </a>
+    <a href="{{route('logout')}}" title="Logout">
+    <i class="fas fa-running"></i>
+    </a>
+    @endif
 </div>
 
 <div class="container mt-5">

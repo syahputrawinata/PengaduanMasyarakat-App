@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Report;
 use \App\Models\comment;
+use \App\Services\RegionService;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -56,10 +57,6 @@ class ReportController extends Controller
         $path = 'image-pengaduan/'.$filename;
 
         Storage::disk('public')->put($path,file_get_contents($image));
-        // $path = null;
-        // if ($request->hasFile('image')) {
-        //     $path = $request->file('image')->store('public/pengaduan');
-        // }
 // dd($request->all());
         // Simpan data pengaduan ke database
         Report::create([
@@ -82,7 +79,7 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
         $reports = Report::with(['comments'])->findOrFail($id);
@@ -132,6 +129,44 @@ class ReportController extends Controller
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan!');
     }
 
+    public function showMonitoring(RegionService $regionService)
+    {
+        $reports = Report::where('user_id', auth()->id()) // Pengaduan hanya milik user yang login
+        ->with('response', 'response.responseProgress') // Ambil relasi dengan tanggapan
+        ->latest() // Urutkan berdasarkan waktu terbaru
+        ->get();
+
+        // if (is_string($reports->response->responseProgress->histories)) {
+        //     $reports->response->responseProgress->histories = json_decode($reports->response->responseProgress->histories, true); // true untuk mendapatkan array
+        // }
+        foreach ($reports as $report) {
+            $report->province_name = $regionService->getProvinceName($report->province);
+            $report->regency_name = $regionService->getRegencyName($report->province, $report->regency);
+            $report->subdistrict_name = $regionService->getDistrictName($report->regency, $report->subdistrict);
+            $report->village_name = $regionService->getVillageName($report->subdistrict, $report->village);
+        }
+        // dd($reports->response, $reports->response->responseProgress);
+
+        return view('guest.report.monitoring', compact('reports'));
+    }
+
+    public function deleteMonitoring($id)
+    {
+        $report = Report::where('id', $id)->where('user_id', auth()->id())->first();
+
+        if (!$report) {
+            return redirect()->route('report.deleteMonitoring')->with('error', 'Laporan tidak ditemukan.');
+        }
+
+        if ($report->response) {
+            return redirect()->route('report.deleteMonitoring')->with('error', 'Laporan sudah ditanggapi dan tidak dapat dihapus.');
+        }
+
+        $report->delete();
+
+        return redirect()->route('report.deleteMonitoring')->with('success', 'Laporan berhasil dihapus.');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -148,11 +183,4 @@ class ReportController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -16,21 +16,9 @@ class UserSeeder extends Seeder
     {
         //
          // Membuat akun Staff
-         $staff = User::create([
-            'email' => 'staff@provinsi.com',
-            'password' => Hash::make('12345678'),  // Gantilah dengan password yang aman
-            'role' => 'staff', // Role staff
-        ]);
 
-        // Menghubungkan staff dengan provinsi
-        StaffProvince::create([
-            'user_id' => $staff->id, // ID user staff
-            'province' => '32',  // Provinsi yang ditugaskan
-        ]);
-
-        // Membuat akun Headstaff
         $headstaff = User::create([
-            'email' => 'headstaff@provinsi.com',
+            'email' => 'haceh@provinsi.com',
             'password' => Hash::make('12345678'),  // Gantilah dengan password yang aman
             'role' => 'head_staff', // Role headstaff
         ]);
@@ -38,7 +26,7 @@ class UserSeeder extends Seeder
         // Menghubungkan headstaff dengan provinsi
         StaffProvince::create([
             'user_id' => $headstaff->id, // ID user headstaff
-            'province' => '32',  // Provinsi yang ditugaskan
+            'province' => '11',  // Provinsi yang ditugaskan
         ]);
     }
 }

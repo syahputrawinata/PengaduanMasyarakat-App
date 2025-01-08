@@ -55,7 +55,7 @@ class LoginController extends Controller
             // Login user setelah registrasi
             Auth::login($users);
 
-            return redirect()->route('guest.dashboard')->with('success', 'Akun terbuat!Anda telah login!');
+            return redirect()->route('report.index')->with('success', 'Akun terbuat!Anda telah login!');
         }
 
         return redirect()->back()->with('failregis', 'Email sudah terdaftaf');

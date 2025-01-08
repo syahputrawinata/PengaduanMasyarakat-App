@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,14 +9,22 @@ class ResponseProgress extends Model
     use HasFactory;
 
     protected $fillable = [
-    'response_id', 
-    'description', 
-    'status', 
-    'image'];
+        'response_id',
+        'report_id',
+        'histories',
+    ];
 
-    // Relasi: Progress dimiliki oleh respons
     public function response()
     {
-        return $this->belongsTo(Response::class);
+        return $this->belongsTo(Response::class, 'response_id');
     }
+
+    public function report()
+    {
+        return $this->belongsTo(Report::class, 'report_id');
+    }
+
+    protected $casts = [
+        'histories' => 'array',  // Mengonversi kolom histories yang berisi JSON menjadi array
+    ];
 }

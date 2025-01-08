@@ -6,12 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jumlah Pengaduan dan Tanggapan</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Custom Styling */
         body {
             background-color: #f8f9fa;
         }
@@ -32,16 +29,17 @@
     </style>
 </head>
 <body>
-    <!-- Chart Container -->
     <div class="chart-container">
-        <h3>Jumlah Pengaduan dan Tanggapan terhadap Pengaduan <br> <strong>JAWA BARAT</strong></h3>
-        <!-- Canvas for Chart -->
+        <h3>Jumlah Pengaduan dan Tanggapan terhadap Pengaduan <br> <strong>{{ $staffProvince->province_name }}</strong></h3>
         <canvas id="barChart"></canvas>
     </div>
 
-    <!-- Script for Chart.js -->
     <script>
-        // Data Grafik
+        // Data dari Controller
+        const complaintsCount = {{ $complaintsCount }};
+        const responsesCount = {{ $responsesCount }};
+
+        // Render Chart
         const ctx = document.getElementById('barChart').getContext('2d');
         const barChart = new Chart(ctx, {
             type: 'bar',
@@ -49,14 +47,14 @@
                 labels: ['Pengaduan', 'Tanggapan'],
                 datasets: [{
                     label: 'Total Data',
-                    data: [2, 2], // Nilai batang
+                    data: [complaintsCount, responsesCount],
                     backgroundColor: [
                         'rgba(173, 216, 230, 0.5)', // Light Blue
                         'rgba(255, 182, 193, 0.5)'  // Light Pink
                     ],
                     borderColor: [
-                        'rgba(173, 216, 230, 1)', // Light Blue Border
-                        'rgba(255, 182, 193, 1)'  // Light Pink Border
+                        'rgba(173, 216, 230, 1)',
+                        'rgba(255, 182, 193, 1)'
                     ],
                     borderWidth: 1
                 }]
@@ -65,11 +63,7 @@
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true,
-                        max: 2, // Menetapkan maksimum nilai sumbu Y
-                        ticks: {
-                            stepSize: 0.2
-                        }
+                        beginAtZero: true
                     }
                 },
                 plugins: {
